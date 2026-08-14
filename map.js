@@ -8,8 +8,8 @@ import THINGS from "./data/things.js";
 import * as list from "./stack.js";
 
 // ---------- world geometry (world units are CSS px at scale 1) ----------
-const WORLD_W = 1800;   // 1640 content + right rail for the governance bore
-const RAIL_X = 1700;
+const WORLD_W = 2600;   // wide bands + right rail for the governance bore
+const RAIL_X = 2450;
 
 // presentational clustering; ids absent from every group fall into ""
 const GROUPS = {
@@ -56,7 +56,7 @@ const byLayer = {};
 THINGS.forEach((t) => { (byLayer[t.layer] = byLayer[t.layer] || []).push(t); });
 
 // ---------- camera ----------
-const S_MIN = 0.1, S_MAX = 2.2;
+const S_MIN = 0.06, S_MAX = 2.2;
 let view = { x: 0, y: 0, s: 0.3 };
 let vp = null, world = null, raf = 0, saveTimer = 0;
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -152,6 +152,7 @@ export function open(parts) {
     const rest = (byLayer[l.id] || []).filter((t) => !grouped.has(t.id));
     if (rest.length) groups.push(["", rest]);
 
+    const clusters = el("div", { class: "clusters" });
     groups.forEach(([label, things]) => {
       if (!things.length) return;
       const g = el("div", { class: "cluster" });
@@ -163,8 +164,9 @@ export function open(parts) {
         row.appendChild(n);
       });
       g.appendChild(row);
-      sec.appendChild(g);
+      clusters.appendChild(g);
     });
+    sec.appendChild(clusters);
     world.appendChild(sec);
   });
 
@@ -197,7 +199,8 @@ export function open(parts) {
 
   wireGestures();
 
-  // measure, draw the governance bore, aim the camera
+  // measure, draw the governance bore, aim the camera.
+  // Default is fit-width at the surface: you arrive at governance and descend.
   requestAnimationFrame(() => {
     if (!vp.isConnected) return;
     drawEdges();
@@ -205,7 +208,12 @@ export function open(parts) {
     const saved = lsGet("aimap.view", null);
     if (!isNaN(n)) fitStratum(n);
     else if (saved && typeof saved.s === "number") { view = saved; apply(); }
-    else { view = viewFor(0, 0, WORLD_W, world.offsetHeight); apply(); }
+    else {
+      const st = stage();
+      const s = Math.min(S_MAX, Math.max(S_MIN, st.w / WORLD_W));
+      view = { s, x: st.x, y: st.y };
+      apply();
+    }
   });
 }
 

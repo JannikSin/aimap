@@ -13,7 +13,9 @@
 // When in doubt, bump.
 // v2: the atlas. map.js is new and app.js/app.css/index.html all assume it,
 // which is exactly the paired-change case above.
-const CACHE = "aimap-v2";
+// v3: world widened to 2600 with cluster cards; map.js geometry and the CSS
+// that lays it out changed together.
+const CACHE = "aimap-v3";
 
 const PRECACHE = [
   "./",
