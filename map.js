@@ -167,6 +167,10 @@ export function open(parts) {
       clusters.appendChild(g);
     });
     sec.appendChild(clusters);
+    // zoomed far out the nodes are texture, so the whole stratum is the target
+    sec.addEventListener("click", (e) => {
+      if (vp.dataset.zoom === "far" && !e.target.closest("button")) fitStratum(l.id);
+    });
     world.appendChild(sec);
   });
 

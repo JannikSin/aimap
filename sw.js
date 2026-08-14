@@ -15,7 +15,8 @@
 // which is exactly the paired-change case above.
 // v3: world widened to 2600 with cluster cards; map.js geometry and the CSS
 // that lays it out changed together.
-const CACHE = "aimap-v3";
+// v4: far-zoom stratum tap-to-dive plus bigger overview titles, paired.
+const CACHE = "aimap-v4";
 
 const PRECACHE = [
   "./",

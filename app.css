@@ -448,7 +448,7 @@ body.mapmode { overflow: hidden; }
 .strattitle { min-width: 0; }
 .stratname {
   font-family: var(--serif);
-  font-size: 62px;
+  font-size: 76px;
   font-weight: 700;
   color: var(--ink);
   background: none;
@@ -457,7 +457,7 @@ body.mapmode { overflow: hidden; }
   text-align: left;
   cursor: pointer;
 }
-.stratq { font-size: 30px; color: var(--muted); margin-top: 8px; }
+.stratq { font-size: 34px; color: var(--muted); margin-top: 8px; }
 
 .stratexplain {
   margin: 12px 0 4px 190px;
