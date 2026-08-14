@@ -2,7 +2,7 @@
 // surface, silicon at bedrock. One-finger pan, two-finger pinch, wheel zoom,
 // double-tap to dive, momentum, remembered camera. The old list survives at
 // #/stack/list as the accessible/fallback view.
-import { root, el, esc, go, lsGet, lsSet, consultLine, markGet, CONTENT_AS_OF } from "./core.js";
+import { root, el, esc, go, lsGet, lsSet, consultLine, markGet, wanderNext, CONTENT_AS_OF } from "./core.js";
 import LAYERS from "./data/layers.js";
 import THINGS from "./data/things.js";
 import * as list from "./stack.js";
@@ -182,7 +182,7 @@ export function open(parts) {
   // legend cartouche
   const legend = el("div", { class: "plaque legend" },
     '<p class="plaquetitle">Legend</p>' +
-    '<p><span class="node big demo">Written up</span> has a full page. <span class="node demo">Listed</span> is placed, not written.</p>' +
+    '<p><span class="node big demo">Written up</span> has a full page. <span class="node demo">Listed</span> carries a shorter note.</p>' +
     '<p><span class="node mine demo">✓ Yours</span> and <span class="node nope demo">declined</span> are marks you set on a thing’s page. They live on this device only.</p>' +
     '<p class="plaquefoot">' + esc(consultLine()) + "</p>" +
     '<p class="plaquefoot">Content as of ' + CONTENT_AS_OF + "</p>");
@@ -200,7 +200,8 @@ export function open(parts) {
   const ctl = el("div", { class: "mapctl" });
   [["+", () => zoomAt(vp.clientWidth / 2, vp.clientHeight / 2, 1.45), "Zoom in"],
    ["−", () => zoomAt(vp.clientWidth / 2, vp.clientHeight / 2, 1 / 1.45), "Zoom out"],
-   ["⛶", fitWorld, "Fit the whole map"]].forEach(([label, fn, title]) => {
+   ["⛶", fitWorld, "Fit the whole map"],
+   ["⚄", () => go("#/thing/" + wanderNext(null)), "Wander: open something worth reading"]].forEach(([label, fn, title]) => {
     const b = el("button", { type: "button", class: "ctlbtn", title, "aria-label": title }, label);
     b.addEventListener("click", fn);
     ctl.appendChild(b);

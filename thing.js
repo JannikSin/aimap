@@ -1,7 +1,7 @@
 // thing.js: the detail route. Name, layer badge, aliases, one line, body only
 // if the corpus wrote one ("listed, not written up" is an honest state), typed
 // facts with plain noted dates, and local-only personal status.
-import { root, el, esc, go, consult, markGet, markSet } from "./core.js";
+import { root, el, esc, go, consult, markGet, markSet, wanderNext } from "./core.js";
 import THINGS from "./data/things.js";
 import LAYERS from "./data/layers.js";
 import READS from "./data/reads.js";
@@ -32,6 +32,9 @@ export function open(parts) {
 
   if (t.body) {
     root.appendChild(el("div", { class: "prose thingbody" }, "<p>" + esc(t.body) + "</p>"));
+  } else if (t.note) {
+    root.appendChild(el("div", { class: "prose thingbody" }, "<p>" + esc(t.note) + "</p>"));
+    root.appendChild(el("p", { class: "notwritten" }, "A short note, not a full write-up."));
   } else {
     root.appendChild(el("p", { class: "notwritten" },
       "Listed, not written up. It sits on layer " + t.layer + ", " + esc(layerName[t.layer]) + "."));
@@ -86,6 +89,11 @@ export function open(parts) {
     essay.addEventListener("click", () => go("#/read/" + readN));
     root.appendChild(essay);
   }
+
+  // wander: keep moving through the mound, unvisited write-ups first
+  const wander = el("button", { type: "button", class: "backbtn wanderbtn" }, "⚄ Wander somewhere new");
+  wander.addEventListener("click", () => go("#/thing/" + wanderNext(t.id)));
+  root.appendChild(wander);
 
   const back = el("button", { type: "button", class: "backbtn" }, "Back to the map");
   back.addEventListener("click", () => go("#/stack/" + t.layer));

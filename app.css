@@ -606,6 +606,7 @@ body.mapmode { overflow: hidden; }
 }
 
 .maplink { margin: 0 0 14px; }
+.wanderbtn { border-color: var(--accent); font-weight: 600; }
 
 @media (prefers-reduced-motion: reduce) {
   .node, .stratexplain, .clusterlabel { transition: none; }

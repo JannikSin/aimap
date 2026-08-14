@@ -18,7 +18,9 @@
 // v4: far-zoom stratum tap-to-dive plus bigger overview titles, paired.
 // v5: review crackdown. Gesture race fixes, local-date consult, personal
 // marks on the map (new CSS + the JS that emits it), read ticks, essay links.
-const CACHE = "aimap-v5";
+// v6: notes for every entity (no blank pages), wander button; data + modules
+// + css changed together.
+const CACHE = "aimap-v6";
 
 const PRECACHE = [
   "./",

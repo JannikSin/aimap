@@ -42,6 +42,9 @@ THINGS.forEach((t) => {
   if (t.body && !(t.facts && t.facts.some((f) => f.noted))) {
     fail(t.id + " has a body but no noted fact");
   }
+  if (t.body && t.note) fail(t.id + " has both body and note; pick one tier");
+  if (t.note && /https?:/i.test(t.note)) fail(t.id + " note contains a URL; notes must not carry links");
+  if (t.note && /\bverified\b/i.test(t.note)) fail(t.id + " note uses the word 'verified'");
   (t.facts || []).forEach((f) => {
     if (!f.noted) fail(t.id + " fact '" + f.label + "' missing noted date");
     if (!["structural", "perishable"].includes(f.durability))

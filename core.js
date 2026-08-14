@@ -2,9 +2,11 @@
 // counter, and local-only personal state. Nothing tab-specific lives here.
 // All localStorage keys are aimap.-prefixed: seven apps share this origin.
 
+import THINGS from "./data/things.js";
+
 export const root = document.getElementById("root");
 export const tabbar = document.getElementById("tabbar");
-export const CONTENT_AS_OF = "2026-08-13";
+export const CONTENT_AS_OF = "2026-08-13, notes expanded 2026-08-14";
 
 // ---------- storage ----------
 // Returns false when the write did not land (a full quota on iOS throws), so a
@@ -94,3 +96,22 @@ export function readDone(n) {
   if (!d.includes(n)) { d.push(n); lsSet("aimap.readdone", d); }
 }
 export function readDoneList() { return lsGet("aimap.readdone", []); }
+
+// ---------- wander: traverse the mound one page at a time ----------
+// Random unvisited entity, full write-ups first, then notes. When everything
+// has been wandered, the trail resets. Visited-set is device-local.
+export function wanderNext(currentId) {
+  const seen = new Set(lsGet("aimap.wander", []));
+  const pool = (filter) =>
+    THINGS.filter((t) => t.id !== currentId && !seen.has(t.id) && filter(t));
+  let candidates = pool((t) => !!t.body);
+  if (!candidates.length) candidates = pool((t) => !!t.note);
+  if (!candidates.length) {
+    lsSet("aimap.wander", []);
+    candidates = THINGS.filter((t) => t.id !== currentId && t.body);
+  }
+  const pick = candidates[Math.floor(Math.random() * candidates.length)];
+  const seenNow = lsGet("aimap.wander", []);
+  if (!seenNow.includes(pick.id)) { seenNow.push(pick.id); lsSet("aimap.wander", seenNow); }
+  return pick.id;
+}
