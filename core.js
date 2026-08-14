@@ -43,10 +43,18 @@ export function go(hash) {
 // No button anywhere. Opening any #/thing or #/read route pushes today's date
 // into a set. Distinct days are counted from 2026-09-01 so build week cannot
 // pad the number. The review procedure is: open the app, read the line.
+// LOCAL date, not UTC: an evening train ride must not count as tomorrow,
+// because this number is the kill-review metric.
 const CONSULT_START = "2026-09-01";
+export function localDay() {
+  const d = new Date();
+  return d.getFullYear() + "-" +
+    String(d.getMonth() + 1).padStart(2, "0") + "-" +
+    String(d.getDate()).padStart(2, "0");
+}
 export function consult() {
   const days = lsGet("aimap.consulted", []);
-  const today = new Date().toISOString().slice(0, 10);
+  const today = localDay();
   if (!days.includes(today)) { days.push(today); lsSet("aimap.consulted", days); }
 }
 export function consultLine() {
@@ -79,3 +87,10 @@ export function readPosSet(n, y) {
   p[n] = y;
   lsSet("aimap.readpos", p);
 }
+
+// ---------- which reads have been opened (a tick on the list, local-only) ----------
+export function readDone(n) {
+  const d = lsGet("aimap.readdone", []);
+  if (!d.includes(n)) { d.push(n); lsSet("aimap.readdone", d); }
+}
+export function readDoneList() { return lsGet("aimap.readdone", []); }

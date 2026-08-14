@@ -4,9 +4,12 @@
 import { root, el, esc, go, consult, markGet, markSet } from "./core.js";
 import THINGS from "./data/things.js";
 import LAYERS from "./data/layers.js";
+import READS from "./data/reads.js";
 
 const layerName = {};
 LAYERS.forEach((l) => { layerName[l.id] = l.name; });
+// which long-read covers each layer (layers 1+2 and 4+5 share an essay)
+const READ_OF_LAYER = { 0: 1, 1: 2, 2: 2, 3: 3, 4: 4, 5: 4, 6: 5, 7: 6, 8: 8 };
 
 export function open(parts) {
   const id = parts[1];
@@ -75,7 +78,16 @@ export function open(parts) {
   });
   root.appendChild(markBox);
 
-  const back = el("button", { type: "button", class: "backbtn" }, "Back to the stack");
+  const readN = READ_OF_LAYER[t.layer];
+  const readPiece = READS.find((r) => r.n === readN);
+  if (readPiece) {
+    const essay = el("button", { type: "button", class: "backbtn" },
+      "Read the layer essay: " + esc(readPiece.title));
+    essay.addEventListener("click", () => go("#/read/" + readN));
+    root.appendChild(essay);
+  }
+
+  const back = el("button", { type: "button", class: "backbtn" }, "Back to the map");
   back.addEventListener("click", () => go("#/stack/" + t.layer));
   root.appendChild(back);
 }

@@ -16,7 +16,9 @@
 // v3: world widened to 2600 with cluster cards; map.js geometry and the CSS
 // that lays it out changed together.
 // v4: far-zoom stratum tap-to-dive plus bigger overview titles, paired.
-const CACHE = "aimap-v4";
+// v5: review crackdown. Gesture race fixes, local-date consult, personal
+// marks on the map (new CSS + the JS that emits it), read ticks, essay links.
+const CACHE = "aimap-v5";
 
 const PRECACHE = [
   "./",

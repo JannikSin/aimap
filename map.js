@@ -2,7 +2,7 @@
 // surface, silicon at bedrock. One-finger pan, two-finger pinch, wheel zoom,
 // double-tap to dive, momentum, remembered camera. The old list survives at
 // #/stack/list as the accessible/fallback view.
-import { root, el, esc, go, lsGet, lsSet, consultLine, CONTENT_AS_OF } from "./core.js";
+import { root, el, esc, go, lsGet, lsSet, consultLine, markGet, CONTENT_AS_OF } from "./core.js";
 import LAYERS from "./data/layers.js";
 import THINGS from "./data/things.js";
 import * as list from "./stack.js";
@@ -60,6 +60,10 @@ const S_MIN = 0.06, S_MAX = 2.2;
 let view = { x: 0, y: 0, s: 0.3 };
 let vp = null, world = null, raf = 0, saveTimer = 0;
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// rotation or a window resize changes the stage; re-clamp so the world cannot
+// be stranded outside the new viewport. Registered once, guarded by liveness.
+window.addEventListener("resize", () => { if (vp && vp.isConnected) apply(); });
 
 function clampView() {
   view.s = Math.min(S_MAX, Math.max(S_MIN, view.s));
@@ -159,7 +163,12 @@ export function open(parts) {
       if (label) g.appendChild(el("p", { class: "clusterlabel" }, esc(label)));
       const row = el("div", { class: "clusternodes" });
       things.forEach((t) => {
-        const n = el("button", { type: "button", class: "node" + (t.body ? " big" : "") }, esc(t.name));
+        // personal marks (device-only) surface on the map: ✓ ring for
+        // "I use this", dimmed strike for a deliberate no
+        const m = markGet(t.id);
+        const cls = "node" + (t.body ? " big" : "") + (m === "uses" ? " mine" : m === "no" ? " nope" : "");
+        const n = el("button", { type: "button", class: cls },
+          (m === "uses" ? "✓ " : "") + esc(t.name));
         n.addEventListener("click", () => go("#/thing/" + t.id));
         row.appendChild(n);
       });
@@ -167,10 +176,6 @@ export function open(parts) {
       clusters.appendChild(g);
     });
     sec.appendChild(clusters);
-    // zoomed far out the nodes are texture, so the whole stratum is the target
-    sec.addEventListener("click", (e) => {
-      if (vp.dataset.zoom === "far" && !e.target.closest("button")) fitStratum(l.id);
-    });
     world.appendChild(sec);
   });
 
@@ -178,6 +183,7 @@ export function open(parts) {
   const legend = el("div", { class: "plaque legend" },
     '<p class="plaquetitle">Legend</p>' +
     '<p><span class="node big demo">Written up</span> has a full page. <span class="node demo">Listed</span> is placed, not written.</p>' +
+    '<p><span class="node mine demo">✓ Yours</span> and <span class="node nope demo">declined</span> are marks you set on a thing’s page. They live on this device only.</p>' +
     '<p class="plaquefoot">' + esc(consultLine()) + "</p>" +
     '<p class="plaquefoot">Content as of ' + CONTENT_AS_OF + "</p>");
   const lrow = el("p", { class: "plaquelinks" });
@@ -313,7 +319,16 @@ function wireGestures() {
         if (now - tapT < 320 && Math.hypot(e.clientX - tapX, e.clientY - tapY) < 44) {
           zoomAt(e.clientX, e.clientY, view.s > 1.1 ? 0.35 : 2.1);
           tapT = 0;
-        } else { tapT = now; tapX = e.clientX; tapY = e.clientY; }
+        } else {
+          // zoomed far out the nodes are texture, so one tap on the whole
+          // stratum is the dive. Lives here, not on the sections, so it owns
+          // the tap state and cannot race the double-tap above. e.target is
+          // vp (pointer capture retargets), so hit-test the point instead.
+          const under = vp.dataset.zoom === "far" && document.elementFromPoint(e.clientX, e.clientY);
+          const strat = under && !under.closest("button") && under.closest(".stratum");
+          if (strat) { fitStratum(strat.dataset.layer); tapT = 0; }
+          else { tapT = now; tapX = e.clientX; tapY = e.clientY; }
+        }
       }
     } else if (mode === "pan" && !reducedMotion && (Math.abs(vx) > 0.5 || Math.abs(vy) > 0.5)) {
       const glide = () => {
@@ -342,10 +357,9 @@ function wireGestures() {
     } else { view.x -= e.deltaX; apply(); }
   }, { passive: false });
 
-  vp.addEventListener("dblclick", (e) => {
-    if (e.target.closest("button")) return;
-    zoomAt(e.clientX, e.clientY, view.s > 1.1 ? 0.35 : 2.1);
-  });
+  // no dblclick handler on purpose: lift's double-tap branch above already
+  // fires for mouse pointers too, and having both meant desktop double-click
+  // zoomed twice (2.1 * 2.1) per gesture.
 
   // belt and braces against Safari's own pinch handling
   ["gesturestart", "gesturechange", "gestureend"].forEach((n) =>

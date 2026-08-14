@@ -86,6 +86,12 @@ input.addEventListener("keydown", (e) => {
     if (first) first.click();
   }
 });
+// tapping anywhere outside the header and the results dismisses the search
+document.addEventListener("pointerdown", (e) => {
+  if (!panel.hidden && !e.target.closest("#header") && !e.target.closest("#searchresults")) {
+    closeSearch();
+  }
+});
 
 // ---------- boot ----------
 if (!location.hash) history.replaceState(null, "", "#/stack");

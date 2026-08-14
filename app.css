@@ -193,6 +193,7 @@ h1 { font-size: 1.45em; margin: 6px 0 8px; }
 }
 .readtitle { font-weight: 600; font-family: var(--serif); font-size: 1.05em; }
 .readmeta { color: var(--muted); font-size: 0.88em; white-space: nowrap; }
+.readtick { color: var(--good); font-weight: 600; }
 
 .prose {
   font-family: var(--serif);
@@ -524,6 +525,13 @@ body.mapmode { overflow: hidden; }
   outline-offset: 2px;
 }
 .node.demo { pointer-events: none; display: inline-block; margin: 0 6px; }
+/* device-only personal marks: mark + color, never color alone */
+.node.mine {
+  border-color: var(--good);
+  box-shadow: inset 0 0 0 1.5px var(--good);
+  font-weight: 650;
+}
+.node.nope { opacity: 0.45; text-decoration: line-through; }
 
 /* the governance bore down the right rail */
 .edges { position: absolute; top: 0; left: 0; z-index: 0; pointer-events: none; }
