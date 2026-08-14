@@ -1,0 +1,22 @@
+{
+  "name": "AI Map",
+  "short_name": "AI Map",
+  "description": "The whole AI world on one shelf: nine layers, offline, no backend.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#14131a",
+  "theme_color": "#14131a",
+  "icons": [
+    {
+      "src": "./icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

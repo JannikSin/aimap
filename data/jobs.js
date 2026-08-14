@@ -1,0 +1,102 @@
+// The Use answer sheet: for this job, use this, because.
+// pick is free text and always shown; thingIds may be empty (renders
+// non-tappable) or hold several ids (renders one chip per pick).
+export default [
+  // thinking and code
+  { id: "hard-reasoning", family: "Thinking and code",
+    job: "Hard reasoning, multi-file code, a long agent run",
+    pick: "Claude Opus 5", thingIds: ["claude-opus-5"],
+    why: "The default heavy pick; escalate to Fable 5 only at the true edge" },
+  { id: "ordinary-work", family: "Thinking and code",
+    job: "Ordinary work done a thousand times",
+    pick: "Claude Sonnet 5", thingIds: ["claude-sonnet-5"],
+    why: "Speed plus intelligence; Gemini Flash if cost dominates" },
+  { id: "bulk-mechanical", family: "Thinking and code",
+    job: "Bulk mechanical transformation",
+    pick: "Haiku, or an open model you host", thingIds: ["claude-haiku", "gpt-oss"],
+    why: "Cost dominates, capability does not" },
+  { id: "private-data", family: "Thinking and code",
+    job: "Data that must not leave the house",
+    pick: "Local open weights", thingIds: ["qwen", "gpt-oss"],
+    why: "No exceptions, and no 'the API is probably fine'" },
+
+  // video
+  { id: "narration-edit", family: "Video",
+    job: "Editing a narration-driven episode",
+    pick: "Descript", thingIds: ["descript"],
+    why: "Edit video by editing the transcript" },
+  { id: "shorts-cutdown", family: "Video",
+    job: "Cutting Shorts from a long episode",
+    pick: "CapCut or Opus Clip", thingIds: ["capcut", "opus-clip"],
+    why: "Auto-caption and reframe instead of doing it by hand" },
+  { id: "archival-cleanup", family: "Video",
+    job: "Cleaning up archival footage",
+    pick: "Topaz Video AI", thingIds: ["topaz"],
+    why: "Not generative, still essential: restoration is not generation" },
+  { id: "b-roll", family: "Video",
+    job: "B-roll you cannot film",
+    pick: "Veo, Runway or Kling", thingIds: ["veo", "runway", "kling"],
+    why: "Seasoning only, never the spine. Sora's deprecation is the standing warning" },
+  { id: "thumbnails", family: "Images",
+    job: "Thumbnails and channel art",
+    pick: "FLUX, locally", thingIds: ["flux"],
+    why: "Free after the hardware; iterate without a meter running" },
+
+  // audio and speech
+  { id: "transcribe-archive", family: "Audio and speech",
+    job: "Transcribing your own video archive",
+    pick: "faster-whisper, local", thingIds: ["faster-whisper"],
+    why: "Hours of footage, zero marginal cost, nothing uploaded" },
+  { id: "transcribe-uncaptioned", family: "Audio and speech",
+    job: "Transcribing a one-off video with no captions",
+    pick: "Whisper, hosted (a Groq key is the cheap path)", thingIds: ["whisper", "groq"],
+    why: "Free-tier viable, ten minutes to set up" },
+  { id: "narrator-voice", family: "Audio and speech",
+    job: "A consistent narrator voice",
+    pick: "ElevenLabs", thingIds: ["elevenlabs"],
+    why: "The quality leader, if you ever want one without recording sessions" },
+
+  // research
+  { id: "company-research", family: "Research",
+    job: "Company research before an interview",
+    pick: "Perplexity", thingIds: ["perplexity"],
+    why: "Cited and fast" },
+  { id: "course-pdfs", family: "Research",
+    job: "Interrogating course PDFs",
+    pick: "NotebookLM", thingIds: ["notebooklm"],
+    why: "Grounded strictly in what you give it" },
+  { id: "paper-search", family: "Research",
+    job: "Paper search",
+    pick: "alphaXiv", thingIds: ["alphaxiv"],
+    why: "If it is already wired into your agent, do not add another" },
+
+  // jobs
+  { id: "resume-tailoring", family: "Jobs and career",
+    job: "Tailoring a resume to a posting",
+    pick: "Your own tailoring skill, built on your real resume", thingIds: [],
+    why: "Beats every commercial tool because it will not fabricate experience" },
+  { id: "ats-check", family: "Jobs and career",
+    job: "ATS sanity check before a big-company portal",
+    pick: "A Jobscan-style scorer", thingIds: ["jobscan"],
+    why: "Second opinion only; those parsers are quirky in ways worth catching" },
+
+  // engineering
+  { id: "cfd-surrogate", family: "Engineering and CAE",
+    job: "CFD or FEA surrogate modelling",
+    pick: "PhysicsNeMo, or plain PyTorch", thingIds: ["physicsnemo"],
+    why: "If you already own parameter-sweep simulation data, that is exactly the input a surrogate wants" },
+
+  // everyday
+  { id: "meeting-notes", family: "Everyday",
+    job: "Meeting notes",
+    pick: "Granola or Otter", thingIds: ["granola", "otter"],
+    why: "Notes that write themselves while you talk" },
+  { id: "slides", family: "Everyday",
+    job: "Slides",
+    pick: "Gamma", thingIds: ["gamma"],
+    why: "First-draft decks from an outline" },
+  { id: "diagrams", family: "Everyday",
+    job: "Diagrams and sketches",
+    pick: "Napkin, or Excalidraw plus AI", thingIds: ["napkin", "excalidraw"],
+    why: "Text in, diagram out" }
+];

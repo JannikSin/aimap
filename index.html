@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Map</title>
+<!-- All content ships as ES modules, so the app makes ZERO network calls and
+     connect-src 'none' is true by construction, not by permission. GitHub
+     Pages cannot set headers, hence the meta tag. All CSS lives in app.css;
+     no inline styles anywhere (style-src 'self' means they would be blocked). -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'none'; img-src 'self' data:; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="theme-color" content="#f4f2ec" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14131a" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="stylesheet" href="./app.css">
+<link rel="icon" type="image/png" href="./icons/icon-192.png">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+<body>
+<header id="header">
+  <span id="apptitle">AI Map</span>
+  <input id="search" type="search" placeholder="Search the map" aria-label="Search the map" autocomplete="off">
+</header>
+<div id="searchresults" hidden></div>
+<div class="wrap" id="root"></div>
+<nav id="tabbar" aria-label="Sections">
+  <button type="button" data-tab="stack" aria-current="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6.5h16M4 12h16M4 17.5h16"/><path d="M6 4v5M6 9.5v5M6 15v5"/></svg>
+    Stack</button>
+  <button type="button" data-tab="read" aria-current="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5.5C10 4 7.5 3.5 4.5 3.8v14.7c3-.3 5.5.2 7.5 1.7 2-1.5 4.5-2 7.5-1.7V3.8C16.5 3.5 14 4 12 5.5z"/><path d="M12 5.5v14.7"/></svg>
+    Read</button>
+  <button type="button" data-tab="use" aria-current="false">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18.5h6M10 21h4"/><path d="M12 3a6.5 6.5 0 0 1 4 11.6c-.8.7-1.3 1.2-1.5 2.4h-5c-.2-1.2-.7-1.7-1.5-2.4A6.5 6.5 0 0 1 12 3z"/></svg>
+    Use</button>
+</nav>
+<script type="module" src="./app.js"></script>
+</body>
+</html>
