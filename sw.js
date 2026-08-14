@@ -11,7 +11,9 @@
 // plus the markup or module that assumes it). Editing one file alone does not
 // need a bump; the fetch handler is network-first and overwrites in place.
 // When in doubt, bump.
-const CACHE = "aimap-v1";
+// v2: the atlas. map.js is new and app.js/app.css/index.html all assume it,
+// which is exactly the paired-change case above.
+const CACHE = "aimap-v2";
 
 const PRECACHE = [
   "./",
@@ -19,6 +21,7 @@ const PRECACHE = [
   "./app.css",
   "./core.js",
   "./app.js",
+  "./map.js",
   "./stack.js",
   "./read.js",
   "./use.js",

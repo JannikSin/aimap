@@ -1,6 +1,6 @@
 // app.js: routes and the header search. Each tab module owns its rendering.
 import { root, tabbar, el, esc, go } from "./core.js";
-import * as stack from "./stack.js";
+import * as map from "./map.js";
 import * as read from "./read.js";
 import * as use from "./use.js";
 import * as thing from "./thing.js";
@@ -8,7 +8,8 @@ import * as sources from "./sources.js";
 import THINGS from "./data/things.js";
 import LAYERS from "./data/layers.js";
 
-const ROUTES = { stack, read, use, thing, sources };
+// "stack" is the map; the old list lives on at #/stack/list inside map.open
+const ROUTES = { stack: map, read, use, thing, sources };
 // which tab button lights up for each route
 const TAB_OF = { stack: "stack", read: "read", use: "use", thing: "stack", sources: "stack" };
 
@@ -31,6 +32,7 @@ function route() {
     b.setAttribute("aria-current", b.getAttribute("data-tab") === TAB_OF[tab] ? "true" : "false");
   });
   closeSearch();
+  document.body.classList.remove("mapmode");
   root.innerHTML = "";
   window.scrollTo(0, 0);
   ROUTES[tab].open(parts);

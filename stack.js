@@ -13,6 +13,10 @@ export function open(parts) {
   const deepLayer = parts.length > 1 ? parseInt(parts[1], 10) : NaN;
   const openSet = new Set(isNaN(deepLayer) ? foldGet() : [deepLayer]);
 
+  const back = el("button", { type: "button", class: "backbtn maplink" }, "Open the map");
+  back.addEventListener("click", () => go("#/stack"));
+  root.appendChild(back);
+
   const thesis = el("div", { class: "thesis" },
     "<p>A <strong>model</strong> is weights. It cannot do anything alone.</p>" +
     "<p>A <strong>harness</strong> is the program running a model in a loop with tools.</p>" +
